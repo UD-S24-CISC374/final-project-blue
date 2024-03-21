@@ -121,6 +121,12 @@ Player clicks on tiles with their mouse and swaps them to make rows/columns.
 - Bowser copycat stole our cake so we need to travel through 4 different islands (4 levels) to get our cake back.
 
 ## Storyboarding
+![stage_1](https://github.com/UD-S24-CISC374/final-project-blue/main/docs/storyboard/stage_1.png)
+![stage_1_all_tiles_match](https://github.com/UD-S24-CISC374/final-project-blue/main/docs/storyboard/stage_1_all_tiles_match.png)
+![stage_1_click_tiles](https://github.com/UD-S24-CISC374/final-project-blue/main/docs/storyboard/stage_1_click_tiles.png)
+![stage_1_complete](https://github.com/UD-S24-CISC374/final-project-blue/main/docs/storyboard/stage_1_complete.png)
+![stage_1_tile_match](https://github.com/UD-S24-CISC374/final-project-blue/main/docs/storyboard/stage_1_tile_match.png)
+![stage_1_tile_match_score_update](https://github.com/UD-S24-CISC374/final-project-blue/main/docs/storyboard/stage_1_tile_match_score_update.png)
 
 # Assets Needed
 

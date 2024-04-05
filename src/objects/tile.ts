@@ -1,6 +1,7 @@
 /* In prosses of making tiles for the game gride */
 
 /*Swaps one tile with another*/
+/*
 function swapTiles(tile1, tile2) {
     var tempNumValue = tile1.numValue;
     var tempSymbol = tile1.symbol;
@@ -13,3 +14,4 @@ function swapTiles(tile1, tile2) {
     tile2.numValue = tempNumValue;
     tile2.symbol = tempSymbol;
 }
+*/

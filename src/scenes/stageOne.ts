@@ -1,15 +1,18 @@
 import Phaser from "phaser";
+import Swap from "../objects/swap";
 
 export default class StageOne extends Phaser.Scene {
     private boardGroup: Phaser.GameObjects.Group;
+    private swap: Swap;
+
     constructor() {
         super({ key: "StageOne" });
     }
 
     preload() {
-        this.load.spritesheet("diamonds", "assets/img/diamonds32x24x5.png", {
-            frameWidth: 32,
-            frameHeight: 24,
+        this.load.spritesheet("tiles", "assets/img/tile_spritesheet.png", {
+            frameWidth: 150,
+            frameHeight: 150,
         });
     }
 
@@ -34,9 +37,10 @@ export default class StageOne extends Phaser.Scene {
             .setOrigin(1, -1);
 
         const group = this.add.group({
-            key: "diamonds",
-            frame: [0, 1, 2],
+            key: "tiles",
+            frame: [0, 2, 3],
             frameQuantity: 3,
+            randomKey: true,
         });
 
         Phaser.Actions.GridAlign(group.getChildren(), {
@@ -44,38 +48,10 @@ export default class StageOne extends Phaser.Scene {
             height: 3,
             cellWidth: 150,
             cellHeight: 150,
-            x: 472.5,
-            y: 200,
+            x: 410,
+            y: 130,
         });
-        Phaser.Actions.ScaleXY(group.getChildren(), 2, 2);
-
-        /* const cellSize = 100;
-
-        const centerX = this.cameras.main.width / 2;
-        const centerY = this.cameras.main.height / 2;
-
-        this.boardGroup = this.add.group();
-
-        // creates the board
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                const x = j * cellSize + cellSize / 2 + centerX / 1.5;
-                const y = i * cellSize + cellSize / 2 + centerY / 1.5;
-
-                const cell = this.add.sprite(x, y, "cellImage");
-
-                cell.setInteractive();
-
-                this.boardGroup.add(cell);
-
-                // increases tile size
-                cell.on("pointerdown", () => {
-                    this.onCellClicked(cell);
-                });
-            }
-        }*/
-    }
-    private onCellClicked(diamonds: Phaser.GameObjects.Sprite) {
-        diamonds.setScale(1.5);
+        this.swap = new Swap(this);
+        this.swap.tileSetup(group);
     }
 }

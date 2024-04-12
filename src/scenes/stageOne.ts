@@ -1,9 +1,9 @@
 import Phaser from "phaser";
-import Swap from "../objects/swap";
+import TileHandler from "../objects/tileHandler";
 
 export default class StageOne extends Phaser.Scene {
     private boardGroup: Phaser.GameObjects.Group;
-    private swap: Swap;
+    private tileHandler: TileHandler;
     private scoreText: Phaser.GameObjects.Text;
     static score: number = 0;
 
@@ -52,19 +52,22 @@ export default class StageOne extends Phaser.Scene {
         });*/
 
         // add tiles with unique keys corresponding to their value
-        const group = this.add.group();
-        group.add(this.add.sprite(0, 0, "tiles", 0).setName("and"));
+        this.boardGroup = this.add.group();
+        //const group = this.add.group();
+        this.boardGroup.add(this.add.sprite(0, 0, "tiles", 0).setName("and"));
         for (let i = 0; i < 2; i++) {
-            group.add(this.add.sprite(0, 0, "tiles", 2).setName("f"));
-            group.add(this.add.sprite(0, 0, "tiles", 1).setName("or"));
+            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 2).setName("f"));
+            this.boardGroup.add(
+                this.add.sprite(0, 0, "tiles", 1).setName("or")
+            );
         }
         for (let i = 0; i < 4; i++) {
-            group.add(this.add.sprite(0, 0, "tiles", 3).setName("t"));
+            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 3).setName("t"));
         }
 
-        Phaser.Utils.Array.Shuffle(group.getChildren());
+        Phaser.Utils.Array.Shuffle(this.boardGroup.getChildren());
 
-        Phaser.Actions.GridAlign(group.getChildren(), {
+        Phaser.Actions.GridAlign(this.boardGroup.getChildren(), {
             width: 3,
             height: 3,
             cellWidth: 150,
@@ -72,8 +75,8 @@ export default class StageOne extends Phaser.Scene {
             x: 416,
             y: 135,
         });
-        this.swap = new Swap(this);
-        this.swap.tileSetup(group);
+        this.tileHandler = new TileHandler(this);
+        this.tileHandler.tileSetup(this.boardGroup);
     }
 
     update() {

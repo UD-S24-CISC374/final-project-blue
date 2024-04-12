@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import StageOne from "../scenes/stageOne";
 
-export default class Swap {
+export default class TileHandler {
     private scene: Phaser.Scene;
     private selected_tile: Phaser.GameObjects.Sprite | null = null;
     private border: Phaser.GameObjects.Graphics | null = null;
@@ -19,7 +19,7 @@ export default class Swap {
                         this.selected_tile = tile;
                         this.highlightTile(tile);
                     } else {
-                        this.swapTiles(this.selected_tile, tile);
+                        this.swapTiles(group, this.selected_tile, tile);
                         this.selected_tile = null;
                         this.removeHighlight();
                         this.rowCheck(group);
@@ -48,19 +48,20 @@ export default class Swap {
     }
 
     private swapTiles(
+        group: Phaser.GameObjects.Group,
         tile1: Phaser.GameObjects.Sprite,
         tile2: Phaser.GameObjects.Sprite
     ) {
-        // Swap positions
+        const index = group.getChildren().indexOf(tile1);
+        const index2 = group.getChildren().indexOf(tile2);
+
+        Phaser.Utils.Array.MoveTo(group.getChildren(), tile2, index);
+        Phaser.Utils.Array.MoveTo(group.getChildren(), tile1, index2);
+
         const tempX = tile1.x;
         const tempY = tile1.y;
         tile1.setPosition(tile2.x, tile2.y);
         tile2.setPosition(tempX, tempY);
-
-        // Swap names
-        const tempName = tile1.name;
-        tile1.name = tile2.name;
-        tile2.name = tempName;
     }
 
     private rowCheck(group: Phaser.GameObjects.Group) {
@@ -69,7 +70,7 @@ export default class Swap {
         const rows = 3;
 
         for (let row = 0; row < rows; row++) {
-            const rowTiles: Phaser.GameObjects.Sprite[] = [];
+            let rowTiles: Phaser.GameObjects.Sprite[] = [];
             for (let col = 0; col < columns; col++) {
                 const index = col + row * columns;
                 const tile = children[index];
@@ -86,6 +87,7 @@ export default class Swap {
         if (
             row1.includes("tort") ||
             row1.includes("torf") ||
+            row1.includes("fort") ||
             row1.includes("tandt")
         ) {
             StageOne.score += 500;

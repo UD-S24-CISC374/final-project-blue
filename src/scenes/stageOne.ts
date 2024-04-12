@@ -30,6 +30,9 @@ export default class StageOne extends Phaser.Scene {
             150,
             0x909090
         );
+
+        grid.active; // temporary
+
         this.scoreText = this.add
             .text(
                 this.cameras.main.width - 15,

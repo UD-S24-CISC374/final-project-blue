@@ -26,8 +26,8 @@ export default class StageOne extends Phaser.Scene {
             this.cameras.main.height / 2,
             450,
             450,
-            150,
-            150,
+            90,
+            90,
             0x909090
         );
 
@@ -65,17 +65,19 @@ export default class StageOne extends Phaser.Scene {
             this.boardGroup.add(this.add.sprite(0, 0, "tiles", 3).setName("t"));
         }
 
+        this.boardGroup.scaleXY(-0.5);
+
         Phaser.Utils.Array.Shuffle(this.boardGroup.getChildren());
 
         Phaser.Actions.GridAlign(this.boardGroup.getChildren(), {
             width: 3,
             height: 3,
-            cellWidth: 150,
-            cellHeight: 150,
+            cellWidth: 90,
+            cellHeight: 90,
             x: 416,
             y: 135,
         });
-        this.tileHandler = new TileHandler(this);
+        this.tileHandler = new TileHandler(this, 3, 3, 150);
         this.tileHandler.tileSetup(this.boardGroup);
     }
 

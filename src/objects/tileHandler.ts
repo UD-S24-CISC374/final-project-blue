@@ -1,13 +1,24 @@
 import Phaser from "phaser";
-import StageOne from "../scenes/stageOne";
+import { Stage } from "./stage";
 
 export default class TileHandler {
     private scene: Phaser.Scene;
     private selected_tile: Phaser.GameObjects.Sprite | null = null;
     private border: Phaser.GameObjects.Graphics | null = null;
+    private rows: number;
+    private columns: number;
+    private cellSize: number;
 
-    constructor(scene: Phaser.Scene) {
+    constructor(
+        scene: Phaser.Scene,
+        rows: number,
+        columns: number,
+        cellSize: number
+    ) {
         this.scene = scene;
+        this.rows = rows;
+        this.columns = columns;
+        this.cellSize = cellSize;
     }
 
     tileSetup(group: Phaser.GameObjects.Group) {
@@ -33,10 +44,10 @@ export default class TileHandler {
         this.border = this.scene.add.graphics();
         this.border.lineStyle(10, 0xffef79);
         this.border.strokeRect(
-            tile.x - tile.width / 2,
-            tile.y - tile.height / 2,
-            tile.width,
-            tile.height
+            tile.x - this.cellSize / 2,
+            tile.y - this.cellSize / 2,
+            this.cellSize,
+            this.cellSize
         );
     }
 
@@ -66,8 +77,8 @@ export default class TileHandler {
 
     private rowCheck(group: Phaser.GameObjects.Group) {
         const children = group.getChildren() as Phaser.GameObjects.Sprite[];
-        const columns = 3;
-        const rows = 3;
+        const columns = this.columns;
+        const rows = this.rows;
 
         for (let row = 0; row < rows; row++) {
             let rowTiles: Phaser.GameObjects.Sprite[] = [];
@@ -76,11 +87,12 @@ export default class TileHandler {
                 const tile = children[index];
                 rowTiles.push(tile);
             }
-            this.doSomethingWithTile(rowTiles);
+            this.scoreCheck(rowTiles);
         }
     }
 
-    private doSomethingWithTile(rowTiles: Phaser.GameObjects.Sprite[]) {
+    // so far this only works for a 3x3
+    private scoreCheck(rowTiles: Phaser.GameObjects.Sprite[]) {
         let row1 = rowTiles[0].name + rowTiles[1].name + rowTiles[2].name;
         console.log(row1);
 
@@ -90,7 +102,11 @@ export default class TileHandler {
             row1.includes("fort") ||
             row1.includes("tandt")
         ) {
-            StageOne.score += 500;
+            Stage.score += 500;
+        }
+
+        if (Stage.score >= 2000) {
+            this.scene.scene.start("StageTwo");
         }
     }
 }

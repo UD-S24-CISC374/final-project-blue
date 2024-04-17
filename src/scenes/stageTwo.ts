@@ -11,6 +11,7 @@ export default class StageTwo extends Stage {
 
     create() {
         super.create();
+        this.addTilesToGroup(5, 5, 8, 7);
         this.boardGroup.scaleXY(-0.4);
     }
 

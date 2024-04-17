@@ -49,7 +49,6 @@ export class Stage extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor("#C9E5F3");
 
-        // creates a 3x3 grid (450/150 = 3, hence 3x30)
         const grid = this.add.grid(
             this.cameras.main.width / 2,
             this.cameras.main.height / 2,
@@ -69,8 +68,30 @@ export class Stage extends Phaser.Scene {
             .setOrigin(1, -1);
 
         this.boardGroup = this.add.group();
-        this.addTilesToGroup();
+    }
 
+    addTilesToGroup(
+        andTiles: number,
+        orTiles: number,
+        falseTiles: number,
+        trueTiles: number
+    ) {
+        for (let i = 0; i < andTiles; i++) {
+            this.boardGroup.add(
+                this.add.sprite(0, 0, "tiles", 0).setName("and")
+            );
+        }
+        for (let i = 0; i < orTiles; i++) {
+            this.boardGroup.add(
+                this.add.sprite(0, 0, "tiles", 1).setName("or")
+            );
+        }
+        for (let i = 0; i < falseTiles; i++) {
+            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 2).setName("f"));
+        }
+        for (let i = 0; i < trueTiles; i++) {
+            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 3).setName("t"));
+        }
         Phaser.Utils.Array.Shuffle(this.boardGroup.getChildren());
 
         Phaser.Actions.GridAlign(this.boardGroup.getChildren(), {
@@ -81,7 +102,6 @@ export class Stage extends Phaser.Scene {
             x: this.xPos,
             y: this.yPos,
         });
-
         this.tileHandler = new TileHandler(
             this,
             this.rows,
@@ -89,22 +109,6 @@ export class Stage extends Phaser.Scene {
             this.cellSize
         );
         this.tileHandler.tileSetup(this.boardGroup);
-    }
-
-    // need to make more generic since it wont be the same for other scenes
-    addTilesToGroup() {
-        this.boardGroup.add(this.add.sprite(0, 0, "tiles", 0).setName("and"));
-
-        for (let i = 0; i < 2; i++) {
-            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 2).setName("f"));
-            this.boardGroup.add(
-                this.add.sprite(0, 0, "tiles", 1).setName("or")
-            );
-        }
-
-        for (let i = 0; i < 20; i++) {
-            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 3).setName("t"));
-        }
     }
 
     update() {

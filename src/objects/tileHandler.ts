@@ -93,20 +93,50 @@ export default class TileHandler {
 
     // so far this only works for a 3x3
     private scoreCheck(rowTiles: Phaser.GameObjects.Sprite[]) {
-        let row1 = rowTiles[0].name + rowTiles[1].name + rowTiles[2].name;
-        console.log(row1);
+        if (rowTiles.length == 3) {
+            let row1 = rowTiles[0].name + rowTiles[1].name + rowTiles[2].name;
+            console.log(row1);
 
-        if (
-            row1.includes("tort") ||
-            row1.includes("torf") ||
-            row1.includes("fort") ||
-            row1.includes("tandt")
-        ) {
-            Stage.score += 500;
+            if (
+                row1.includes("tort") ||
+                row1.includes("torf") ||
+                row1.includes("fort") ||
+                row1.includes("tandt")
+            ) {
+                Stage.score += 500;
+            }
+            if (Stage.score >= 2000) {
+                this.scene.scene.start("StageTwo");
+            }
         }
 
-        if (Stage.score >= 2000) {
-            this.scene.scene.start("StageTwo");
+        if (rowTiles.length == 5) {
+            let row1 =
+                rowTiles[0].name +
+                rowTiles[1].name +
+                rowTiles[2].name +
+                rowTiles[3].name +
+                rowTiles[4].name;
+            console.log(row1);
+
+            // need to get the reverse or change this
+            if (
+                row1.includes("tortorf") ||
+                row1.includes("tortandf") ||
+                row1.includes("tandtorf") ||
+                row1.includes("torfort") ||
+                row1.includes("torfandt") ||
+                row1.includes("tandfort") ||
+                row1.includes("torforf") ||
+                row1.includes("torfandf") ||
+                row1.includes("tandforf") ||
+                row1.includes("tortort") ||
+                row1.includes("tandtandt") ||
+                row1.includes("tortandt") ||
+                row1.includes("tandtort")
+            ) {
+                Stage.score += 500;
+            }
         }
     }
 }

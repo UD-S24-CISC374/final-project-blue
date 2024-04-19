@@ -40,7 +40,7 @@ export class Stage extends Phaser.Scene {
     }
 
     preload() {
-        this.load.spritesheet("tiles", "assets/img/tile_spritesheet.png", {
+        this.load.spritesheet("tiles", "assets/img/new_tile_spritesheet.png", {
             frameWidth: 150,
             frameHeight: 150,
         });

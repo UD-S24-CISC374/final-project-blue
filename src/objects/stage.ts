@@ -78,19 +78,23 @@ export class Stage extends Phaser.Scene {
     ) {
         for (let i = 0; i < andTiles; i++) {
             this.boardGroup.add(
-                this.add.sprite(0, 0, "tiles", 0).setName("and")
+                this.add.sprite(0, 0, "tiles", 0).setName("&&")
             );
         }
         for (let i = 0; i < orTiles; i++) {
             this.boardGroup.add(
-                this.add.sprite(0, 0, "tiles", 1).setName("or")
+                this.add.sprite(0, 0, "tiles", 1).setName("||")
             );
         }
         for (let i = 0; i < falseTiles; i++) {
-            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 2).setName("f"));
+            this.boardGroup.add(
+                this.add.sprite(0, 0, "tiles", 2).setName("false")
+            );
         }
         for (let i = 0; i < trueTiles; i++) {
-            this.boardGroup.add(this.add.sprite(0, 0, "tiles", 3).setName("t"));
+            this.boardGroup.add(
+                this.add.sprite(0, 0, "tiles", 3).setName("true")
+            );
         }
         Phaser.Utils.Array.Shuffle(this.boardGroup.getChildren());
 

@@ -91,16 +91,25 @@ export default class TileHandler {
         }
     }
 
-    // so far this only works for a 3x3
-
+    // only works for stage 1
+    // might have to implement a for/while loop to simplify this process
+    // also might have to change scoring to a full board clear
     private scoreCheck(rowTiles: Phaser.GameObjects.Sprite[]) {
         if (rowTiles.length == 3) {
             let row = rowTiles[0].name + rowTiles[1].name + rowTiles[2].name;
             console.log(row); // debugging
-            if (this.evaluateExpression(row)) {
+
+            // rowTiles[0].input?.enabled checks if a tile is interactive;
+            if (this.evaluateExpression(row) && rowTiles[0].input?.enabled) {
                 Stage.score += 500;
+
+                // disables interactive functionality for the tiles in the row
+                rowTiles.forEach((tile) => {
+                    tile.disableInteractive();
+                    tile.setBlendMode(3);
+                });
             }
-            if (Stage.score >= 2000) {
+            if (Stage.score >= 1500) {
                 this.scene.scene.start("StageTwo");
             }
         } else if (rowTiles.length == 5) {

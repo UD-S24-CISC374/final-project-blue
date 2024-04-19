@@ -14,7 +14,7 @@ export default class StageOne extends Stage {
 
     create() {
         super.create();
-        this.addTilesToGroup(1, 2, 3, 3);
+        this.addTilesToGroup(1, 2, 2, 4);
     }
 
     update() {

@@ -40,15 +40,18 @@ export class Stage extends Phaser.Scene {
     }
 
     preload() {
-        this.load.spritesheet("tiles", "assets/img/new_tile_spritesheet.png", {
+        this.load.spritesheet("tiles", "assets/img/spritesheet_maybe.png", {
+            frameWidth: 150,
+            frameHeight: 150,
+        });
+        this.load.spritesheet("tiles", "assets/img/spritesheet_select.png", {
             frameWidth: 150,
             frameHeight: 150,
         });
     }
 
     create() {
-        this.cameras.main.setBackgroundColor("#C9E5F3");
-
+        this.cameras.main.setBackgroundColor("#566573");
         const grid = this.add.grid(
             this.cameras.main.width / 2,
             this.cameras.main.height / 2,
@@ -56,7 +59,7 @@ export class Stage extends Phaser.Scene {
             this.gridSize,
             this.cellSize,
             this.cellSize,
-            0x909090
+            0xf7f9f9
         );
         grid.active; // temporary
 
@@ -96,8 +99,14 @@ export class Stage extends Phaser.Scene {
                 this.add.sprite(0, 0, "tiles", 3).setName("true")
             );
         }
-        Phaser.Utils.Array.Shuffle(this.boardGroup.getChildren());
-
+        if (
+            !(
+                this.scene.key == "TutorialScene" ||
+                this.scene.key == "TutorialScene_2"
+            )
+        ) {
+            Phaser.Utils.Array.Shuffle(this.boardGroup.getChildren());
+        }
         Phaser.Actions.GridAlign(this.boardGroup.getChildren(), {
             width: this.columns,
             height: this.rows,

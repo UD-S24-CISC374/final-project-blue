@@ -3,7 +3,8 @@ import MainScene from "./scenes/mainScene";
 import PreloadScene from "./scenes/preloadScene";
 import StageOne from "./scenes/stageOne";
 import StageTwo from "./scenes/stageTwo";
-
+import TutorialScene from "./scenes/tutorialScene";
+import TutorialScene_2 from "./scenes/tutorialScene_2";
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
 
@@ -19,7 +20,14 @@ export const CONFIG = {
         width: DEFAULT_WIDTH,
         height: DEFAULT_HEIGHT,
     },
-    scene: [PreloadScene, MainScene, StageOne, StageTwo],
+    scene: [
+        PreloadScene,
+        MainScene,
+        StageOne,
+        StageTwo,
+        TutorialScene,
+        TutorialScene_2,
+    ],
     physics: {
         default: "arcade",
         arcade: {

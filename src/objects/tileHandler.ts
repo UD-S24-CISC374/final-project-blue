@@ -8,6 +8,8 @@ export default class TileHandler {
     private rows: number;
     private columns: number;
     private cellSize: number;
+    private button: Phaser.GameObjects.Sprite | null = null;
+    private tileRotationTween: Phaser.Tweens.Tween | null = null;
 
     constructor(
         scene: Phaser.Scene,
@@ -41,20 +43,31 @@ export default class TileHandler {
     }
 
     private highlightTile(tile: Phaser.GameObjects.Sprite) {
-        this.border = this.scene.add.graphics();
-        this.border.lineStyle(10, 0xffef79);
-        this.border.strokeRect(
-            tile.x - this.cellSize / 2,
-            tile.y - this.cellSize / 2,
-            this.cellSize,
-            this.cellSize
-        );
+        const originalAngle = tile.angle;
+
+        tile.angle = originalAngle + 15;
+
+        this.tileRotationTween = this.scene.tweens.add({
+            targets: tile,
+            angle: originalAngle,
+            duration: 200,
+            ease: "Linear",
+            repeat: -1,
+            yoyo: true,
+            onComplete: () => {
+                this.scene.tweens.add({
+                    targets: tile,
+                    angle: 0,
+                    duration: 100,
+                    ease: "Linear",
+                });
+            },
+        });
     }
 
     private removeHighlight() {
-        if (this.border) {
-            this.border.destroy();
-            this.border = null;
+        if (this.tileRotationTween) {
+            this.tileRotationTween.complete();
         }
     }
 
@@ -66,13 +79,31 @@ export default class TileHandler {
         const index = group.getChildren().indexOf(tile1);
         const index2 = group.getChildren().indexOf(tile2);
 
+        // Calculate the distance to slide
+        const distanceX = tile2.x - tile1.x;
+        const distanceY = tile2.y - tile1.y;
+
+        // Move the tiles in the group array
         Phaser.Utils.Array.MoveTo(group.getChildren(), tile2, index);
         Phaser.Utils.Array.MoveTo(group.getChildren(), tile1, index2);
 
-        const tempX = tile1.x;
-        const tempY = tile1.y;
-        tile1.setPosition(tile2.x, tile2.y);
-        tile2.setPosition(tempX, tempY);
+        // Slide animation for tile1
+        this.scene.tweens.add({
+            targets: tile1,
+            x: tile1.x + distanceX,
+            y: tile1.y + distanceY,
+            duration: 200,
+            ease: "Linear",
+        });
+
+        // Slide animation for tile2
+        this.scene.tweens.add({
+            targets: tile2,
+            x: tile2.x - distanceX,
+            y: tile2.y - distanceY,
+            duration: 200,
+            ease: "Linear",
+        });
     }
 
     private rowCheck(group: Phaser.GameObjects.Group) {
@@ -91,41 +122,59 @@ export default class TileHandler {
         }
     }
 
-    // only works for stage 1
-    // might have to implement a for/while loop to simplify this process
-    // also might have to change scoring to a full board clear
+    // might have to change scoring to a full board clear
     private scoreCheck(rowTiles: Phaser.GameObjects.Sprite[]) {
-        if (rowTiles.length == 3) {
-            let row = rowTiles[0].name + rowTiles[1].name + rowTiles[2].name;
-            console.log(row); // debugging
+        let row = this.generateExpression(rowTiles);
 
+        if (
+            this.scene.scene.key == "TutorialScene" ||
+            this.scene.scene.key == "TutorialScene_2"
+        ) {
+            this.tutorialScoreCheck(rowTiles, row);
+        } else {
             // rowTiles[0].input?.enabled checks if a tile is interactive;
             if (this.evaluateExpression(row) && rowTiles[0].input?.enabled) {
-                Stage.score += 500;
+                this.disableTiles(rowTiles);
 
-                // disables interactive functionality for the tiles in the row
-                rowTiles.forEach((tile) => {
-                    tile.disableInteractive();
-                    tile.setBlendMode(3);
-                });
-            }
-            if (Stage.score >= 1500) {
-                this.scene.scene.start("StageTwo");
-            }
-        } else if (rowTiles.length == 5) {
-            let row =
-                rowTiles[0].name +
-                rowTiles[1].name +
-                rowTiles[2].name +
-                rowTiles[3].name +
-                rowTiles[4].name;
-
-            console.log(row);
-
-            if (this.evaluateExpression(row)) {
-                Stage.score += 500;
+                if (Stage.score >= 1500 && rowTiles.length == 3) {
+                    this.scene.scene.start("StageTwo");
+                }
             }
         }
+    }
+
+    // tutorial to be completed in different scene parts due to some rows completing at the same time
+    // will generate a button to continue
+    private tutorialScoreCheck(
+        rowTiles: Phaser.GameObjects.Sprite[],
+        row: string
+    ) {
+        // make user perform true and true
+        if (row.trimEnd() === "true && true" && Stage.score == 0) {
+            this.evaluateExpression(row);
+            this.disableTiles(rowTiles);
+            this.createContinueButton();
+        }
+
+        // make user perform false or true
+        if (
+            Stage.score == 500 &&
+            (row.trimEnd() === "false || true" ||
+                row.trimEnd() === "true || false")
+        ) {
+            this.evaluateExpression(row);
+            this.disableTiles(rowTiles);
+            this.createContinueButton();
+        }
+    }
+
+    private generateExpression(rowTiles: Phaser.GameObjects.Sprite[]): string {
+        let row = "";
+        for (let i = 0; i < rowTiles.length; i++) {
+            row += rowTiles[i].name + " ";
+        }
+        console.log(row);
+        return row;
     }
 
     private evaluateExpression(row: string): boolean {
@@ -136,5 +185,37 @@ export default class TileHandler {
             console.error("false");
         }
         return expression;
+    }
+
+    // disables interactive functionality for the tiles in the row
+    private disableTiles(rowTiles: Phaser.GameObjects.Sprite[]) {
+        Stage.score += 500;
+
+        rowTiles.forEach((tile) => {
+            tile.disableInteractive();
+            //tile.setBlendMode(3);
+            tile.setTint(0x566573);
+        });
+    }
+
+    public createContinueButton() {
+        // Create a continue button
+        this.button = this.scene.add.sprite(
+            640,
+            650,
+            "continueButtonTextureKey"
+        );
+        this.button.setInteractive();
+        this.button.on("pointerdown", () => {
+            if (Stage.score == 500) {
+                this.scene.scene.start("TutorialScene_2");
+            }
+
+            if (Stage.score == 1000) {
+                Stage.score = 0;
+                this.scene.scene.start("StageOne");
+            }
+            console.log("Continue button clicked!");
+        });
     }
 }

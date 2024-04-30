@@ -5,6 +5,9 @@ import StageOne from "./scenes/stageOne";
 import StageTwo from "./scenes/stageTwo";
 import TutorialScene from "./scenes/tutorialScene";
 import TutorialScene_2 from "./scenes/tutorialScene_2";
+import StageThree from "./scenes/stageThree";
+import StageComplete from "./scenes/stageComplete";
+
 const DEFAULT_WIDTH = 1280;
 const DEFAULT_HEIGHT = 720;
 
@@ -27,6 +30,8 @@ export const CONFIG = {
         StageTwo,
         TutorialScene,
         TutorialScene_2,
+        StageThree,
+        StageComplete,
     ],
     physics: {
         default: "arcade",

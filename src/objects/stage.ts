@@ -5,6 +5,7 @@ export class Stage extends Phaser.Scene {
     private _boardGroup: Phaser.GameObjects.Group;
     private scoreText: Phaser.GameObjects.Text;
     static score: number = 0;
+    static targetGoal: number = 0;
     private tileHandler: TileHandler;
     private gridSize: number;
     private cellSize: number;
@@ -12,6 +13,7 @@ export class Stage extends Phaser.Scene {
     private columns: number;
     private xPos: number;
     private yPos: number;
+    static restartButton: Phaser.GameObjects.Sprite; // might try and make it a getter
 
     constructor(
         key: string,
@@ -48,6 +50,8 @@ export class Stage extends Phaser.Scene {
             frameWidth: 150,
             frameHeight: 150,
         });
+
+        this.load.image("restartButton", "assets/img/restartButton.png");
     }
 
     create() {
@@ -71,6 +75,24 @@ export class Stage extends Phaser.Scene {
             .setOrigin(1, -1);
 
         this.boardGroup = this.add.group();
+
+        if (
+            !(
+                this.scene.key == "TutorialScene" ||
+                this.scene.key == "TutorialScene_2"
+            )
+        ) {
+            Stage.restartButton = this.add.sprite(250, 180, "restartButton");
+            Stage.restartButton.setInteractive();
+            Stage.restartButton.setScale(0.2);
+
+            Stage.restartButton.on("pointerdown", () => {
+                if (!(this.scene.key == "StageComplete")) {
+                    Stage.targetGoal = 0;
+                    this.scene.start(this.scene.key);
+                }
+            });
+        }
     }
 
     addTilesToGroup(

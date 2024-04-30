@@ -136,10 +136,32 @@ export default class TileHandler {
             if (this.evaluateExpression(row) && rowTiles[0].input?.enabled) {
                 this.disableTiles(rowTiles);
 
-                if (Stage.score >= 1500 && rowTiles.length == 3) {
-                    this.scene.scene.start("StageTwo");
+                /* indicates that the board has been cleared and will
+                   start the corresponding scene */
+                if (Stage.targetGoal == rowTiles.length) {
+                    console.log("Target goal met");
+                    Stage.targetGoal = 0;
+                    this.scene.scene.launch("StageComplete");
+                    this.continueButton(rowTiles);
+                    Stage.restartButton.setVisible(false);
                 }
             }
+        }
+    }
+
+    private stageTransition(rowTiles: Phaser.GameObjects.Sprite[]) {
+        this.scene.scene.stop("StageComplete");
+        switch (rowTiles.length) {
+            case 3:
+                this.scene.scene.start("StageTwo");
+                break;
+            case 5:
+                this.scene.scene.start("StageThree");
+                break;
+            case 7:
+                break;
+            default:
+                break;
         }
     }
 
@@ -190,22 +212,19 @@ export default class TileHandler {
     // disables interactive functionality for the tiles in the row
     private disableTiles(rowTiles: Phaser.GameObjects.Sprite[]) {
         Stage.score += 500;
+        Stage.targetGoal++;
 
         rowTiles.forEach((tile) => {
             tile.disableInteractive();
-            //tile.setBlendMode(3);
             tile.setTint(0x566573);
         });
     }
 
     public createContinueButton() {
-        // Create a continue button
-        this.button = this.scene.add.sprite(
-            640,
-            650,
-            "continueButtonTextureKey"
-        );
+        this.button = this.scene.add.sprite(640, 650, "nextStage");
         this.button.setInteractive();
+        this.button.setScale(0.2);
+
         this.button.on("pointerdown", () => {
             if (Stage.score == 500) {
                 this.scene.scene.start("TutorialScene_2");
@@ -213,9 +232,21 @@ export default class TileHandler {
 
             if (Stage.score == 1000) {
                 Stage.score = 0;
+                Stage.targetGoal = 0;
                 this.scene.scene.start("StageOne");
             }
             console.log("Continue button clicked!");
+        });
+    }
+
+    // previous continue button will be for tutorial
+    private continueButton(rowTiles: Phaser.GameObjects.Sprite[]) {
+        this.button = this.scene.add.sprite(640, 650, "nextStage");
+        this.button.setScale(0.2);
+        this.button.setInteractive();
+        this.button.setDepth(1);
+        this.button.on("pointerdown", () => {
+            this.stageTransition(rowTiles);
         });
     }
 }

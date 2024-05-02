@@ -82,7 +82,7 @@ export class Stage extends Phaser.Scene {
                 this.scene.key == "TutorialScene_2"
             )
         ) {
-            Stage.restartButton = this.add.sprite(250, 180, "restartButton");
+            Stage.restartButton = this.add.sprite(230, 180, "restartButton");
             Stage.restartButton.setInteractive();
             Stage.restartButton.setScale(0.2);
 

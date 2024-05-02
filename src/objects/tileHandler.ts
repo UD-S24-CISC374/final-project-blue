@@ -141,9 +141,10 @@ export default class TileHandler {
                 if (Stage.targetGoal == rowTiles.length) {
                     console.log("Target goal met");
                     Stage.targetGoal = 0;
-                    this.scene.scene.launch("StageComplete");
+                    this.scene.scene.run("StageComplete");
                     this.continueButton(rowTiles);
                     Stage.restartButton.setVisible(false);
+                    this.backgroundColorComplete();
                 }
             }
         }
@@ -159,6 +160,7 @@ export default class TileHandler {
                 this.scene.scene.start("StageThree");
                 break;
             case 7:
+                this.scene.scene.start("GameComplete");
                 break;
             default:
                 break;
@@ -214,6 +216,8 @@ export default class TileHandler {
         Stage.score += 500;
         Stage.targetGoal++;
 
+        this.scene.sound.play("tileClearSound");
+
         rowTiles.forEach((tile) => {
             tile.disableInteractive();
             tile.setTint(0x566573);
@@ -248,5 +252,17 @@ export default class TileHandler {
         this.button.on("pointerdown", () => {
             this.stageTransition(rowTiles);
         });
+    }
+
+    private backgroundColorComplete() {
+        const backgroundColor = this.scene.add.rectangle(
+            0,
+            0,
+            this.scene.cameras.main.width * 2,
+            this.scene.cameras.main.height * 2,
+            0x17202a
+        );
+        backgroundColor.setAlpha(0.8);
+        backgroundColor.setDepth(0);
     }
 }

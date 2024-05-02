@@ -18,9 +18,7 @@ export default class MainMenuScene extends Phaser.Scene {
         }
     }
 
-    preload() {
-        
-    }
+    preload() {}
 
     create() {
         this.tutorialButton = this.add
@@ -40,5 +38,7 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
 
-    update() {}
+    update() {
+        
+    }
 }

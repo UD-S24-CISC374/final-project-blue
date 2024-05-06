@@ -3,8 +3,6 @@ import TileHandler from "./tileHandler";
 
 export class Stage extends Phaser.Scene {
     private _boardGroup: Phaser.GameObjects.Group;
-    private scoreText: Phaser.GameObjects.Text;
-    static score: number = 0;
     static targetGoal: number = 0;
     private tileHandler: TileHandler;
     private gridSize: number;
@@ -14,6 +12,7 @@ export class Stage extends Phaser.Scene {
     private xPos: number;
     private yPos: number;
     static restartButton: Phaser.GameObjects.Sprite; // might try and make it a getter
+    private button: Phaser.GameObjects.Sprite | null = null;
 
     constructor(
         key: string,
@@ -51,11 +50,28 @@ export class Stage extends Phaser.Scene {
             frameHeight: 150,
         });
 
-        this.load.image("restartButton", "assets/img/restartButton.png");
+        this.load.image("shuffleButton", "assets/img/shuffleButton.png");
+        this.load.image("background1", "assets/img/stage1bg.png");
+        this.load.image("background2", "assets/img/stage2bg.png");
+        this.load.image("background3", "assets/img/stage3bg.png");
     }
 
     create() {
-        this.cameras.main.setBackgroundColor("#566573");
+        let background;
+        if (this.scene.key == "StageThree") {
+            background = this.add.image(0, 0, "background3").setOrigin(0);
+        } else if (this.scene.key == "StageTwo") {
+            background = this.add.image(0, 0, "background2").setOrigin(0);
+        } else {
+            background = this.add.image(0, 0, "background1").setOrigin(0);
+        }
+        background.setScale(
+            this.cameras.main.width / background.width,
+            this.cameras.main.height / background.height
+        );
+
+        this.cameras.main.setScroll(0, 0);
+        //this.cameras.main.setBackgroundColor("#566573");
         const grid = this.add.grid(
             this.cameras.main.width / 2,
             this.cameras.main.height / 2,
@@ -63,36 +79,11 @@ export class Stage extends Phaser.Scene {
             this.gridSize,
             this.cellSize,
             this.cellSize,
-            0xf7f9f9
+            0xd5d8dc
         );
         grid.active; // temporary
 
-        this.scoreText = this.add
-            .text(this.cameras.main.width - 15, 15, "Score: " + Stage.score, {
-                color: "#000000",
-                fontSize: "24px",
-            })
-            .setOrigin(1, -1);
-
         this.boardGroup = this.add.group();
-
-        if (
-            !(
-                this.scene.key == "TutorialScene" ||
-                this.scene.key == "TutorialScene_2"
-            )
-        ) {
-            Stage.restartButton = this.add.sprite(230, 180, "restartButton");
-            Stage.restartButton.setInteractive();
-            Stage.restartButton.setScale(0.2);
-
-            Stage.restartButton.on("pointerdown", () => {
-                if (!(this.scene.key == "StageComplete")) {
-                    Stage.targetGoal = 0;
-                    this.scene.start(this.scene.key);
-                }
-            });
-        }
     }
 
     addTilesToGroup(
@@ -146,7 +137,63 @@ export class Stage extends Phaser.Scene {
         this.tileHandler.tileSetup(this.boardGroup);
     }
 
-    update() {
-        this.scoreText.setText("Score: " + Stage.score);
+    update() {}
+
+    shuffleTiles() {
+        this.button = this.add.sprite(
+            this.cameras.main.width - 100,
+            30,
+            "shuffleButton"
+        );
+        this.button.setInteractive();
+        this.button.setScale(0.2);
+        this.button.on("pointerdown", () => {
+            const children =
+                this.boardGroup.getChildren() as Phaser.GameObjects.Sprite[];
+
+            children.forEach((child: Phaser.GameObjects.Sprite) => {
+                if (child.input?.enabled) {
+                    if (child.name == "&&" || child.name == "||") {
+                        this.getRandomOperator(0, 1, child);
+                    } else {
+                        this.getRandomValue(2, 3, child);
+                    }
+                }
+            });
+        });
+    }
+
+    getRandomOperator(
+        min: number,
+        max: number,
+        child: Phaser.GameObjects.Sprite
+    ) {
+        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        switch (randomNum) {
+            case 0:
+                child.setTexture("tiles", 0).setName("&&");
+                break;
+            case 1:
+                child.setTexture("tiles", 1).setName("||");
+                break;
+            default:
+                break;
+        }
+    }
+    getRandomValue(min: number, max: number, child: Phaser.GameObjects.Sprite) {
+        const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        switch (randomNum) {
+            case 2:
+                child.setTexture("tiles", 2).setName("false");
+
+                break;
+            case 3:
+                child.setTexture("tiles", 3).setName("true");
+                break;
+            default:
+                break;
+        }
     }
 }

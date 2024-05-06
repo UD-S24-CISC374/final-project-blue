@@ -143,7 +143,6 @@ export default class TileHandler {
                     Stage.targetGoal = 0;
                     this.scene.scene.run("StageComplete");
                     this.continueButton(rowTiles);
-                    Stage.restartButton.setVisible(false);
                     this.backgroundColorComplete();
                 }
             }
@@ -174,7 +173,7 @@ export default class TileHandler {
         row: string
     ) {
         // make user perform true and true
-        if (row.trimEnd() === "true && true" && Stage.score == 0) {
+        if (row.trimEnd() === "true && true") {
             this.evaluateExpression(row);
             this.disableTiles(rowTiles);
             this.createContinueButton();
@@ -182,9 +181,8 @@ export default class TileHandler {
 
         // make user perform false or true
         if (
-            Stage.score == 500 &&
-            (row.trimEnd() === "false || true" ||
-                row.trimEnd() === "true || false")
+            row.trimEnd() === "false || true" ||
+            row.trimEnd() === "true || false"
         ) {
             this.evaluateExpression(row);
             this.disableTiles(rowTiles);
@@ -213,7 +211,6 @@ export default class TileHandler {
 
     // disables interactive functionality for the tiles in the row
     private disableTiles(rowTiles: Phaser.GameObjects.Sprite[]) {
-        Stage.score += 500;
         Stage.targetGoal++;
 
         this.scene.sound.play("tileClearSound");
@@ -230,16 +227,20 @@ export default class TileHandler {
         this.button.setScale(0.2);
 
         this.button.on("pointerdown", () => {
-            if (Stage.score == 500) {
+            if (this.scene.scene.key == "TutorialScene") {
                 this.scene.scene.start("TutorialScene_2");
+            } else {
+                this.scene.scene.start("StageOne");
             }
+        });
 
-            if (Stage.score == 1000) {
-                Stage.score = 0;
+        this.button.on("pointerdown", () => {
+            if (this.scene.scene.key == "TutorialScene") {
+                this.scene.scene.start("TutorialScene_2");
+            } else {
                 Stage.targetGoal = 0;
                 this.scene.scene.start("StageOne");
             }
-            console.log("Continue button clicked!");
         });
     }
 

@@ -13,6 +13,7 @@ export default class StageThree extends Stage {
         super.create();
         this.addTilesToGroup(11, 10, 14, 14);
         this.boardGroup.scaleXY(-0.4);
+        this.shuffleTiles();
     }
 
     update() {

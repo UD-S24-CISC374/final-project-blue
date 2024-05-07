@@ -27,18 +27,14 @@ export default class MainMenuScene extends Phaser.Scene {
         this.tutorialButton.on("pointerdown", () => {
             this.scene.start("tutorialScene");
         });
- 
+
         this.gameButton = this.add
             .text(100, 150, "Play", { color: "#f00" })
             .setInteractive();
         this.gameButton.on("pointerdown", () => {
             this.scene.start("stageOne");
         });
-    
     }
 
-
-    update() {
-        
-    }
+    update() {}
 }

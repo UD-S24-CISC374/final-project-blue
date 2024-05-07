@@ -225,6 +225,13 @@ export default class TileHandler {
         this.button = this.scene.add.sprite(640, 650, "nextStage");
         this.button.setInteractive();
         this.button.setScale(0.2);
+        this.button.on("pointerover", () => {
+            this.button?.setScale(0.22);
+        });
+
+        this.button.on("pointerout", () => {
+            this.button?.setScale(0.2);
+        });
 
         this.button.on("pointerdown", () => {
             if (this.scene.scene.key == "TutorialScene") {
@@ -250,6 +257,13 @@ export default class TileHandler {
         this.button.setScale(0.2);
         this.button.setInteractive();
         this.button.setDepth(1);
+        this.button.on("pointerover", () => {
+            this.button?.setScale(0.22);
+        });
+
+        this.button.on("pointerout", () => {
+            this.button?.setScale(0.2);
+        });
         this.button.on("pointerdown", () => {
             this.stageTransition(rowTiles);
         });

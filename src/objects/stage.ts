@@ -82,6 +82,7 @@ export class Stage extends Phaser.Scene {
             0xd5d8dc
         );
         grid.active; // temporary
+        grid.setAlpha(0.75);
 
         this.boardGroup = this.add.group();
     }
@@ -141,12 +142,21 @@ export class Stage extends Phaser.Scene {
 
     shuffleTiles() {
         this.button = this.add.sprite(
-            this.cameras.main.width - 100,
+            this.cameras.main.width - 110,
             30,
             "shuffleButton"
         );
         this.button.setInteractive();
         this.button.setScale(0.2);
+
+        this.button.on("pointerover", () => {
+            this.button?.setScale(0.22);
+        });
+
+        this.button.on("pointerout", () => {
+            this.button?.setScale(0.2);
+        });
+
         this.button.on("pointerdown", () => {
             const children =
                 this.boardGroup.getChildren() as Phaser.GameObjects.Sprite[];

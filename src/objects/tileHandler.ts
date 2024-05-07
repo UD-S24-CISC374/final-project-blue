@@ -10,6 +10,7 @@ export default class TileHandler {
     private cellSize: number;
     private button: Phaser.GameObjects.Sprite | null = null;
     private tileRotationTween: Phaser.Tweens.Tween | null = null;
+    private checkButton: Phaser.GameObjects.Sprite;
 
     constructor(
         scene: Phaser.Scene,
@@ -24,6 +25,19 @@ export default class TileHandler {
     }
 
     tileSetup(group: Phaser.GameObjects.Group) {
+        this.checkButton = this.scene.add.sprite(1075, 360, "checkButton");
+
+        this.checkButton.setScale(0.2);
+        this.checkButton.setInteractive();
+        this.checkButton.setDepth(1);
+        this.checkButton.on("pointerover", () => {
+            this.checkButton.setScale(0.22);
+        });
+
+        this.checkButton.on("pointerout", () => {
+            this.checkButton.setScale(0.2);
+        });
+
         (group.getChildren() as Phaser.GameObjects.Sprite[]).forEach(
             (tile: Phaser.GameObjects.Sprite) => {
                 tile.setInteractive();
@@ -35,11 +49,14 @@ export default class TileHandler {
                         this.swapTiles(group, this.selected_tile, tile);
                         this.selected_tile = null;
                         this.removeHighlight();
-                        this.rowCheck(group);
+                        //this.rowCheck(group);
                     }
                 });
             }
         );
+        this.checkButton.on("pointerdown", () => {
+            this.rowCheck(group);
+        });
     }
 
     private highlightTile(tile: Phaser.GameObjects.Sprite) {
@@ -249,6 +266,7 @@ export default class TileHandler {
                 this.scene.scene.start("StageOne");
             }
         });
+        this.checkButton.setVisible(false);
     }
 
     // previous continue button will be for tutorial
@@ -267,6 +285,7 @@ export default class TileHandler {
         this.button.on("pointerdown", () => {
             this.stageTransition(rowTiles);
         });
+        this.checkButton.setVisible(false);
     }
 
     private backgroundColorComplete() {

@@ -127,6 +127,7 @@ export default class TileHandler {
         const children = group.getChildren() as Phaser.GameObjects.Sprite[];
         const columns = this.columns;
         const rows = this.rows;
+        let anyTilesCleared: boolean = false;
 
         for (let row = 0; row < rows; row++) {
             let rowTiles: Phaser.GameObjects.Sprite[] = [];
@@ -135,19 +136,28 @@ export default class TileHandler {
                 const tile = children[index];
                 rowTiles.push(tile);
             }
-            this.scoreCheck(rowTiles);
+            anyTilesCleared = this.scoreCheck(rowTiles, anyTilesCleared);
+        }
+        if (!anyTilesCleared) {
+            this.scene.sound.play("tileWrongSound");
         }
     }
 
-    // might have to change scoring to a full board clear
-    private scoreCheck(rowTiles: Phaser.GameObjects.Sprite[]) {
+    private scoreCheck(
+        rowTiles: Phaser.GameObjects.Sprite[],
+        anyTilesCleared: boolean
+    ): boolean {
         let row = this.generateExpression(rowTiles);
 
         if (
             this.scene.scene.key == "TutorialScene" ||
             this.scene.scene.key == "TutorialScene_2"
         ) {
-            this.tutorialScoreCheck(rowTiles, row);
+            anyTilesCleared = this.tutorialScoreCheck(rowTiles, row);
+            if (anyTilesCleared) {
+                return true;
+            }
+            return false;
         } else {
             // rowTiles[0].input?.enabled checks if a tile is interactive;
             if (this.evaluateExpression(row) && rowTiles[0].input?.enabled) {
@@ -162,8 +172,13 @@ export default class TileHandler {
                     this.continueButton(rowTiles);
                     this.backgroundColorComplete();
                 }
+                return true;
             }
         }
+        if (anyTilesCleared) {
+            return true;
+        }
+        return false;
     }
 
     private stageTransition(rowTiles: Phaser.GameObjects.Sprite[]) {
@@ -188,12 +203,12 @@ export default class TileHandler {
     private tutorialScoreCheck(
         rowTiles: Phaser.GameObjects.Sprite[],
         row: string
-    ) {
+    ): boolean {
         // make user perform true and true
         if (row.trimEnd() === "true && true") {
-            this.evaluateExpression(row);
             this.disableTiles(rowTiles);
             this.createContinueButton();
+            return true;
         }
 
         // make user perform false or true
@@ -201,10 +216,11 @@ export default class TileHandler {
             row.trimEnd() === "false || true" ||
             row.trimEnd() === "true || false"
         ) {
-            this.evaluateExpression(row);
             this.disableTiles(rowTiles);
             this.createContinueButton();
+            return true;
         }
+        return false;
     }
 
     private generateExpression(rowTiles: Phaser.GameObjects.Sprite[]): string {

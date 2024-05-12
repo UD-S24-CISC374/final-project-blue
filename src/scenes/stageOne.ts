@@ -16,6 +16,11 @@ export default class StageOne extends Stage {
         super.create();
         this.addTilesToGroup(1, 2, 2, 4);
         this.shuffleTiles();
+        let stageText = this.add.text(80, 640, "STAGE 3", {
+            fontSize: "40px",
+            color: "#EAF2F8",
+        });
+        stageText.setShadow(5, 5, "#000000", 5, true, true);
     }
 
     update() {

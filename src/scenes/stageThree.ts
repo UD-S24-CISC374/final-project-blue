@@ -14,6 +14,11 @@ export default class StageThree extends Stage {
         this.addTilesToGroup(11, 10, 14, 14);
         this.boardGroup.scaleXY(-0.4);
         this.shuffleTiles();
+        let stageText = this.add.text(80, 640, "STAGE 3", {
+            fontSize: "40px",
+            color: "#EAF2F8",
+        });
+        stageText.setShadow(5, 5, "#000000", 5, true, true);
     }
 
     update() {

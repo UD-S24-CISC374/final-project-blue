@@ -32,6 +32,27 @@ export default class MainMenuScene extends Phaser.Scene {
             this.cameras.main.height / background.height
         );
 
+        let ruleText = this.add.text(
+            50,
+            600,
+            "Create rows that evaluate\nto true to win!",
+            {
+                fontSize: "20px",
+                color: "#000000",
+                stroke: "#EAF2F8",
+                strokeThickness: 7,
+            }
+        );
+
+        this.tweens.add({
+            targets: ruleText,
+            scaleX: 1.2,
+            scaleY: 1.2,
+            duration: 1000,
+            yoyo: true,
+            repeat: -1,
+        });
+
         let title = this.add.image(1000, 600, "title");
         title.setScale(0.6);
 

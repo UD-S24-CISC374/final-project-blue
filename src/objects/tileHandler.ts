@@ -254,6 +254,7 @@ export default class TileHandler {
         });
     }
 
+    // tutorial continue button
     public createContinueButton() {
         this.button = this.scene.add.sprite(640, 650, "nextStage");
         this.button.setInteractive();

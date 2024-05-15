@@ -9,8 +9,7 @@ Blue
 # Developers
 
 -   Mitchell Ramos-Navarro (mramosna@udel.edu)
--   Name (email)
--   Name (email)
+-   Emma Metcalfe (emmreese@udel.edu)
 
 # Blurb
 
@@ -18,9 +17,9 @@ Embark on a thrilling journey in Boolean Bonanza, a brain-teasing puzzle game in
 
 # Basic Instructions
 
-Complete stages by clearing rows!\n
-To clear a row, you must evaluate rows to True.\n
-You can click on the 'check' button to check if any rows evaluate to True.\n
+Complete stages by clearing rows!<br>
+To clear a row, you must evaluate rows to True.<br>
+You can click on the 'check' button to check if any rows evaluate to True.<br>
 If you come across rows that cannot evaluate to True, you can click on the 'shuffle' button to change tiles.
 
 # Screenshot
@@ -37,4 +36,6 @@ Link to our [egdd](https://github.com/UD-S24-CISC374/final-project-blue/blob/mai
 
 # Credits
 
-TEXT GOES HERE
+[Background Music](https://pixabay.com/music/video-games-bit-beats-1-168243/)
+[Incorrect Sound](https://pixabay.com/sound-effects/error-4-199275/)
+[Start Menu Background](https://craftpix.net/freebies/free-nature-backgrounds-pixel-art/)

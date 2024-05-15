@@ -36,6 +36,6 @@ Link to our [egdd](https://github.com/UD-S24-CISC374/final-project-blue/blob/mai
 
 # Credits
 
-[Background Music](https://pixabay.com/music/video-games-bit-beats-1-168243/)
-[Incorrect Sound](https://pixabay.com/sound-effects/error-4-199275/)
+[Background Music](https://pixabay.com/music/video-games-bit-beats-1-168243/)<br>
+[Incorrect Sound](https://pixabay.com/sound-effects/error-4-199275/)<br>
 [Start Menu Background](https://craftpix.net/freebies/free-nature-backgrounds-pixel-art/)

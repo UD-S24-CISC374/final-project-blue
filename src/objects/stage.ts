@@ -11,7 +11,6 @@ export class Stage extends Phaser.Scene {
     private columns: number;
     private xPos: number;
     private yPos: number;
-    static restartButton: Phaser.GameObjects.Sprite; // might try and make it a getter
     private button: Phaser.GameObjects.Sprite | null = null;
 
     constructor(
